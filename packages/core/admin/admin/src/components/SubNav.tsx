@@ -97,8 +97,13 @@ const Link = (
 
   return (
     <StyledLink {...rest} onClick={handleClick}>
-      <Box width={'100%'} paddingLeft={3} paddingRight={3} borderRadius={1}>
-        <Flex justifyContent="space-between" width="100%" gap={1}>
+      <Box
+        width={'100%'}
+        paddingLeft={{ initial: 3, large: 3 }}
+        paddingRight={{ initial: 3, large: 3 }}
+        borderRadius={1}
+      >
+        <Flex justifyContent="space-between" width="100%" gap={{ initial: 2, large: 1 }}>
           <Typography
             tag="div"
             lineHeight="32px"
@@ -125,11 +130,11 @@ const Header = ({ label }: { label: string }) => {
     <StyledHeader
       justifyContent="space-between"
       paddingLeft={{
-        initial: 4,
+        initial: 5,
         large: 5,
       }}
       paddingRight={{
-        initial: 4,
+        initial: 5,
         large: 5,
       }}
     >
@@ -148,8 +153,14 @@ const Sections = ({
   [key: string]: unknown;
 }) => {
   return (
-    <Box paddingTop={4} paddingBottom={4} maxWidth={{ initial: '100%', medium: '23.2rem' }}>
-      <Flex tag="ul" gap="5" direction="column" alignItems="stretch" {...props}>
+    <Box
+      paddingTop={{ initial: 5, large: 4 }}
+      paddingBottom={{ initial: 5, large: 4 }}
+      paddingLeft={{ initial: 3, large: 0 }}
+      paddingRight={{ initial: 3, large: 0 }}
+      maxWidth={{ initial: '100%', medium: '23.2rem' }}
+    >
+      <Flex tag="ul" gap="6" direction="column" alignItems="stretch" {...props}>
         {children.map((child, index) => {
           return <li key={index}>{child}</li>;
         })}
@@ -207,17 +218,17 @@ const Section = ({
     <Flex direction="column" alignItems="stretch" gap={2}>
       <Box
         paddingLeft={{
-          initial: 4,
+          initial: 3,
           large: 5,
         }}
         paddingRight={{
-          initial: 4,
+          initial: 3,
           large: 5,
         }}
       >
         <Flex position="relative" justifyContent="space-between" gap={2}>
           <Flex>
-            <Box paddingRight={1}>
+            <Box>
               <Typography variant="sigma" textColor="neutral600">
                 {label}
               </Typography>
@@ -252,11 +263,11 @@ const Section = ({
         gap="2px"
         alignItems={'stretch'}
         marginLeft={{
-          initial: 1,
+          initial: 0,
           large: 2,
         }}
         marginRight={{
-          initial: 1,
+          initial: 0,
           large: 2,
         }}
       >
