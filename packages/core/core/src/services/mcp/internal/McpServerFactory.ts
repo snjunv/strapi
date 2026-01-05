@@ -27,12 +27,14 @@ export type CreateMcpServerWithRegistriesParams = {
   strapi: Core.Strapi;
   definitions: McpCapabilityDefinitions;
   isDevMode: boolean;
+  authResult?: { ability: string[] };
 };
 
 export const createMcpServerWithRegistries = ({
   strapi,
   definitions,
   isDevMode,
+  authResult,
 }: CreateMcpServerWithRegistriesParams): McpServerWithRegistries => {
   const capabilities: {
     logging?: Record<string, unknown>;
@@ -82,6 +84,19 @@ export const createMcpServerWithRegistries = ({
   resourceRegistry.bind(mcpServer);
 
   // TODO @Nico: Manage Permissions from Auth
+
+  toolRegistry.list().forEach((cap) => {
+    const shouldEnableDevModeOnly = cap.devModeOnly === true && isDevMode;
+
+    // const shouldEnableAuth =
+    //   cap.auth?.actions && authResult?.ability
+    //     ? cap.auth.actions.every((action: string) => ability.can(action))
+    //     : false;
+
+    if (shouldEnableDevModeOnly) {
+      toolRegistry.enable(cap.name);
+    }
+  });
 
   // Enable devModeOnly capabilities when running in dev mode
   if (isDevMode === true) {

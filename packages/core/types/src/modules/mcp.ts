@@ -20,6 +20,18 @@ import type * as Core from '../core';
 export interface McpCapabilityDefinition<Name extends string = string> {
   name: Name;
   devModeOnly: boolean;
+  /**
+   * Optional authentication requirements for this capability.
+   * If specified, the capability will only be enabled if the authenticated user's
+   * ability satisfies all required actions.
+   */
+  auth?: {
+    /**
+     * Array of admin/plugin action IDs that must be satisfied.
+     * Examples: 'admin::roles.read', 'plugin::content-manager.explorer.read'
+     */
+    actions: string[];
+  };
 }
 
 /**
@@ -143,6 +155,9 @@ export interface McpService {
     inputSchema?: InputSchema;
     outputSchema: OutputSchema;
     devModeOnly: boolean;
+    auth?: {
+      actions: string[];
+    };
     createHandler: (strapi: Core.Strapi) => McpToolCallback<InputSchema, OutputSchema>;
   }): void;
 
@@ -162,6 +177,9 @@ export interface McpService {
     description: Description;
     argsSchema?: ArgsSchema;
     devModeOnly: boolean;
+    auth?: {
+      actions: string[];
+    };
     createHandler: (strapi: Core.Strapi) => McpPromptCallback<ArgsSchema>;
   }): void;
 
@@ -175,6 +193,9 @@ export interface McpService {
     uri: string;
     metadata: ResourceMetadata;
     devModeOnly: boolean;
+    auth?: {
+      actions: string[];
+    };
     createHandler: (strapi: Core.Strapi) => McpResourceCallback;
   }): void;
 

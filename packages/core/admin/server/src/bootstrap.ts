@@ -102,6 +102,46 @@ const createDefaultAPITokensIfNeeded = async () => {
   }
 };
 
+/**
+ * Ensures each active admin user has a default App Token.
+ * App Tokens are used for MCP and other future integrations.
+ *
+ * @sideEffects Creates new App Tokens in the database if conditions are met.
+ */
+const createDefaultAppTokensForUsers = async () => {
+  const userService = getService('user');
+  const appTokenService = getService('app-token');
+
+  // Get all active admin users
+  const users = await strapi.db.query('admin::user').findMany({
+    where: { isActive: true },
+  });
+
+  for (const user of users) {
+    // Check if user already has an app token
+    const existingTokens = await appTokenService.list(user.id);
+
+    if (existingTokens.length === 0) {
+      // Create a default inherit-type token for this user
+      try {
+        await appTokenService.create({
+          name: 'Default App Token',
+          description: 'Default token for MCP and other integrations',
+          type: constants.APP_TOKEN_TYPE.INHERIT,
+          userId: user.id,
+          lifespan: null, // No expiration
+        });
+        strapi.log.info(`[Bootstrap] Created default App Token for user ${user.email}`);
+      } catch (error) {
+        strapi.log.error(
+          `[Bootstrap] Failed to create default App Token for user ${user.email}:`,
+          error
+        );
+      }
+    }
+  }
+};
+
 export default async ({ strapi }: { strapi: Core.Strapi }) => {
   // Get the merged token options (includes defaults merged with user config)
   const { options } = getTokenOptions();
@@ -182,5 +222,9 @@ export default async ({ strapi }: { strapi: Core.Strapi }) => {
   transferService.token.checkSaltIsDefined();
   tokenService.checkSecretIsDefined();
 
+  const appTokenService = getService('app-token');
+  appTokenService.checkSaltIsDefined();
+
   await createDefaultAPITokensIfNeeded();
+  await createDefaultAppTokensForUsers();
 };
