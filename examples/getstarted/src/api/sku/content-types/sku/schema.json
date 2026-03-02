@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "skus",
+  "info": {
+    "singularName": "sku",
+    "pluralName": "skus",
+    "displayName": "产品-SKU"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "specs": {
+      "type": "json"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "stock": {
+      "type": "integer"
+    },
+    "skuCode": {
+      "type": "uid"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product.product",
+      "inversedBy": "skus"
+    }
+  }
+}

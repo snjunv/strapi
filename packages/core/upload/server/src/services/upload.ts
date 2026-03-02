@@ -155,6 +155,9 @@ export default ({ strapi }: { strapi: Core.Strapi }) => {
       mime: type,
       size: bytesToKbytes(size),
       sizeInBytes: size,
+      provider_metadata: {
+        folderNamePath: await fileService.getFolderNamePath(fileInfo.folder),
+      },
     };
 
     const { refId, ref, field } = metas;

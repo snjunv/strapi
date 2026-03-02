@@ -35,4 +35,27 @@ module.exports = () => ({
     enabled: false,
     resolve: `../plugins/todo-example`, // From the /examples/plugins folder
   },
+  upload: {
+    config: {
+      provider: 'aws-s3',
+      providerOptions: {
+        baseUrl: process.env.S3_BASE_URL, // 很重要
+        rootPath: process.env.ST_PATH,
+        params: {
+          ACL: process.env.S3_ACL,
+          Bucket: process.env.S3_BUCKET,
+        },
+        region: 'auto', // R2 固定写 auto
+        credentials: {
+          accessKeyId: process.env.S3_ACCESSKEY_ID,
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+        },
+        endpoint: process.env.S3_ENDPOINT,
+        s3Options:{
+          accessKeyId: process.env.S3_ACCESSKEY_ID,
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+        },
+      }
+    },
+  },
 });

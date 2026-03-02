@@ -96,10 +96,23 @@ export default {
     const s3Client = new S3Client(config);
     const filePrefix = rootPath ? `${rootPath.replace(/\/+$/, '')}/` : '';
 
+    // const getFileKey = (file: File) => {
+    //   const path = file.path ? `${file.path}/` : '';
+    //   return `${filePrefix}${path}${file.hash}${file.ext}`;
+    // };
+
     const getFileKey = (file: File) => {
+      const folderNamePath = file.provider_metadata?.folderNamePath;
+
       const path = file.path ? `${file.path}/` : '';
-      return `${filePrefix}${path}${file.hash}${file.ext}`;
+
+      const finalPath = folderNamePath
+        ? `${folderNamePath}/`
+        : path;
+
+      return `${filePrefix}${finalPath}${file.hash}${file.ext}`;
     };
+
 
     const upload = async (file: File, customParams: Partial<PutObjectCommandInput> = {}) => {
       const fileKey = getFileKey(file);

@@ -9,11 +9,16 @@ const sqlite = {
 const postgres = {
   client: 'postgres',
   connection: {
-    database: 'strapi',
-    user: 'strapi',
-    password: 'strapi',
+    database: process.env.DATABASE,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     port: 5432,
-    host: 'localhost',
+    host: process.env.DB_HOST,
+    pool_mode: 'session',
+    schema: process.env.DB_SCHEMA,
+    ssl:{
+      rejectUnauthorized:false,
+    }
   },
 };
 

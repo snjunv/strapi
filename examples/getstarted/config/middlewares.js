@@ -14,6 +14,13 @@ module.exports = [
           'frame-src': ["'self'"], // URLs that will be loaded in an iframe (e.g. Content Preview)
           // Needed to load the `@vercel/stega` lib on the dummy-preview page
           'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+          'img-src': [
+            "'self'", 
+            'data:', 
+            'blob:', 
+            'https://market-assets.strapi.io', 
+            'https://*.stsoon.com' // <- 加上你图片所在域名
+          ],
         },
       },
     },

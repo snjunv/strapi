@@ -52,4 +52,47 @@ const signFileUrls = async (file: File) => {
   return signedFile;
 };
 
-export default { getFolderPath, deleteByIds, signFileUrls };
+type ParentLink = {
+  [key: string]: number;
+};
+const getFolderNamePath = async (folderId?: number | null): Promise<string | null> => {
+  if (!folderId) return null;
+
+  const segments: string[] = [];
+
+  // ✅ 复用 Strapi 官方 join table
+  // @ts-expect-error internal metadata
+  const { joinTable } = strapi.db.metadata
+    .get(FOLDER_MODEL_UID)
+    .attributes.parent;
+
+  let currentId: number | null = folderId;
+
+  while (currentId) {
+    // 1️⃣ 查当前 folder
+    const folder = await strapi.db
+      .query(FOLDER_MODEL_UID)
+      .findOne({
+        where: { id: currentId },
+        select: ['id', 'name'],
+      });
+
+    if (!folder) break;
+
+    segments.unshift(folder.name);
+
+    // 2️⃣ 查 parent（join table）
+    const parentLink: ParentLink | undefined = await strapi.db
+      .getConnection(joinTable.name)
+      .where(joinTable.joinColumn.name, currentId)
+      .first();
+
+    currentId = parentLink
+      ? parentLink[joinTable.inverseJoinColumn.name]
+      : null;
+  }
+
+  return segments.join('/');
+};
+
+export default { getFolderPath, deleteByIds, signFileUrls, getFolderNamePath};

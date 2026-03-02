@@ -5,7 +5,7 @@ import { Button } from '@strapi/design-system';
 import { registerPreviewRoute } from './preview';
 
 const config = {
-  locales: ['it', 'es', 'en', 'en-GB', 'fr'],
+  locales: ['zh-Hans','it', 'es', 'en', 'en-GB', 'fr'],
 };
 
 export default {

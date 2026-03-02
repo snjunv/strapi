@@ -51,6 +51,7 @@
     "@aws-sdk/lib-storage": "3.433.0",
     "@aws-sdk/s3-request-presigner": "3.433.0",
     "@aws-sdk/types": "3.433.0",
+    "@strapi/provider-upload-aws-s3": "workspace:*",
     "lodash": "4.17.21"
   },
   "devDependencies": {
